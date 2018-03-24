@@ -21,31 +21,47 @@ TRANGE = 20  #range that 'horizontal' line can encompas in hough line trasform
 GAP = 15    #used in hor_lines, absolute distance in pixels between each pixel checked
 PERCENT_COVERAGE = .75 # percent of entire page a staff horizonally takes up...will be changed
 
+
+DIA_KERNEL_DIM = (2,2) #dimension of kernel in dilate
+ERODE_KERNEL_DIM = (1,2)
+DILATE_ITERATIONS = 1
+ERODE_ITERATIONS = 1
+GAUSS_KERNEL_SIZE = (5,5)
+BETA = 100 #brightness
+THRESH = 150 #thresholding
+
 sys.setrecursionlimit(50000)
 
 
 ## collection of different methods to apply to image to make more clear
 
 
-def dialate(img):
-    kernel = np.ones((2,2), np.uint8)
-    dilated_im = cv2.dilate(img, kernel, iterations = 1)
+def dilate(img):
+    kernel = np.ones(DIA_KERNEL_DIM, np.uint8)
+    dilated_im = cv2.dilate(img, kernel, DILATE_ITERATIONS)
     cv2.imshow("dilated image", dilated_im)
-    cv2.imwrite("di.jpg", dilated_im)  
+#    cv2.imwrite("di.jpg", dilated_im)  
+    cv2.waitKey(0)
     return dilated_im
 
-
+def erode(img):
+    kernel = np.ones(ERODE_KERNEL_DIM, np.uint8)
+    eroded_im = cv2.erode(img, kernel, ERODE_ITERATIONS)
+    cv2.imshow("eroded image", dilated_im)
+#    cv2.imwrite("ero.jpg", eroded_im)  
+    cv2.waitKey(0)
+    return eroded_im
+    
 def gaussian_blur(img):
     # 5x5 kernel, (0,0) implies sigma calculated automatically
-    gauss_im=cv2.GaussianBlur(img,(5,5),0,0)
+    gauss_im=cv2.GaussianBlur(img,GAUSS_KERNEL_SIZE,0,0)
     cv2.imshow("Gaussian Blur", gauss_im)
     cv2.waitKey(0)
-    cv2.imwrite("gaussian.jpg", gauss_im)
+#    cv2.imwrite("gaussian.jpg", gauss_im)
     return gauss_im
 
 def increase_brightness(img):
-    # Specify offset factor
-    beta = 100
+   
     # Convert to YCrCb color space
     ycbImage = cv2.cvtColor(img,cv2.COLOR_BGR2YCrCb)
     # Convert to float32
@@ -53,7 +69,7 @@ def increase_brightness(img):
     # Split the channels
     Ychannel, Cr, Cb = cv2.split(ycbImage)
     # Add offset to the Ychannel 
-    Ychannel = np.clip(Ychannel + beta , 0, 255)
+    Ychannel = np.clip(Ychannel + BETA, 0, 255)
     # Histogram equilization (normalizes values after brightening)
     #Ychannel = cv2.equalizeHist(np.uint8(Ychannel))
     # Merge the channels and show the output
@@ -65,12 +81,20 @@ def increase_brightness(img):
     return imbright
 
 def threshold(img):
-     img=1
-    
+    maxValue= 255
+    th, thresh_im = cv2.threshold(img, THRESH, maxValue, cv2.THRESH_BINARY)
+    cv2.namedWindow("thresh_im", cv2.WINDOW_AUTOSIZE)
+    cv2.imshow("thresh_im", thresh_im)
+    cv2.waitKey(0)
+#    cv2.imwrite("thresh.jpg", thresh_im)
+    return thresh_im
+
+
+   
 
 def kmeans(img):    
 
-    oneDdata = imbright.reshape((-1,3))
+    oneDdata = img.reshape((-1,3))
     oneDdata = np.float32(oneDdata)
     ##cv2.kmeans(data, K, critera, attempts)
     
@@ -86,10 +110,10 @@ def kmeans(img):
     #convert back data
     center = np.uint8(center)
     res = center[label.flatten()]
-    kmeansIm = res.reshape((imbright.shape))
+    kmeansIm = res.reshape((img.shape))
     cv2.imshow('kmeansIm',kmeansIm)
     cv2.waitKey(0)
-    returns kmeansIm
+    return kmeansIm
 
 
 def  main():
@@ -104,15 +128,16 @@ def  main():
       filename = args['filename']
 
     img = cv2.imread(filename)
-## Dialate
-  
-## Gaussian blur
-    
-## Brightness to get rid of some grey spots
-#Threshold to black and white
 
-## Kmeans to figure out average between clusters (threshold value)
-
+    ## Dialate
+    img = dilate(img)
+    ## Brightness to get rid of some grey spots
+    img = increase_brightness(img)
+    ## Kmeans to figure out average between clusters (threshold value)
+    img = kmeans(img)
+    #Threshold to black and white
+    img = threshold(img)
+    cv2.imwrite("process_img.jpg", img)
 
 def testcode():
     infile=raw_input()
