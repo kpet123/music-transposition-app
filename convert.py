@@ -23,17 +23,23 @@ PERCENT_COVERAGE = .75 # percent of entire page a staff horizonally takes up...w
 
 
 DIA_KERNEL_DIM = (2,2) #dimension of kernel in dilate
-ERODE_KERNEL_DIM = (1,2)
+ERODE_KERNEL_DIM = (2,2)
 DILATE_ITERATIONS = 1
 ERODE_ITERATIONS = 1
 GAUSS_KERNEL_SIZE = (5,5)
-BETA = 100 #brightness
-THRESH = 150 #thresholding
+BETA = 125 #brightness
+THRESH = 10 #thresholding
 
 sys.setrecursionlimit(50000)
 
 
 ## collection of different methods to apply to image to make more clear
+##figure out what the variables mean
+def adaptiveThreshold(img):
+    size = len(img[0])/3
+    img = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, \
+            cv2.THRESH_BINARY,size,2)
+    return img
 
 
 def dilate(img):
@@ -47,7 +53,7 @@ def dilate(img):
 def erode(img):
     kernel = np.ones(ERODE_KERNEL_DIM, np.uint8)
     eroded_im = cv2.erode(img, kernel, ERODE_ITERATIONS)
-    cv2.imshow("eroded image", dilated_im)
+    cv2.imshow("eroded image", eroded_im)
 #    cv2.imwrite("ero.jpg", eroded_im)  
     cv2.waitKey(0)
     return eroded_im
@@ -61,20 +67,13 @@ def gaussian_blur(img):
     return gauss_im
 
 def increase_brightness(img):
-   
-    # Convert to YCrCb color space
-    ycbImage = cv2.cvtColor(img,cv2.COLOR_BGR2YCrCb)
     # Convert to float32
-    ycbImage = np.float32(ycbImage)
-    # Split the channels
-    Ychannel, Cr, Cb = cv2.split(ycbImage)
-    # Add offset to the Ychannel 
-    Ychannel = np.clip(Ychannel + BETA, 0, 255)
+    img = np.float32(img)
+    # Add offset to img 
+    imbright = np.clip(img + BETA, 0, 255)
     # Histogram equilization (normalizes values after brightening)
-    #Ychannel = cv2.equalizeHist(np.uint8(Ychannel))
+    imbright = cv2.equalizeHist(np.uint8(imbright))
     # Merge the channels and show the output
-    ycbImage = cv2.merge([np.uint8(Ychannel), np.uint8(Cr), np.uint8(Cb)])
-    imbright = cv2.cvtColor(ycbImage, cv2.COLOR_YCrCb2BGR)
     cv2.namedWindow("Bright music", cv2.WINDOW_AUTOSIZE)
     cv2.imshow("Bright music", imbright)
     cv2.waitKey(0)
@@ -82,7 +81,15 @@ def increase_brightness(img):
 
 def threshold(img):
     maxValue= 255
-    th, thresh_im = cv2.threshold(img, THRESH, maxValue, cv2.THRESH_BINARY)
+    th, thresh_im = cv2.threshold(img, 0, maxValue, \
+            cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+    print "th is ", th
+    th2, thresh_im = cv2.threshold(img, th, maxValue, \
+            cv2.THRESH_BINARY)
+    print "th2 is ", th2
+    th3, thresh_im =  cv2.threshold(img, 2, maxValue, \
+            cv2.THRESH_BINARY)
+
     cv2.namedWindow("thresh_im", cv2.WINDOW_AUTOSIZE)
     cv2.imshow("thresh_im", thresh_im)
     cv2.waitKey(0)
@@ -99,7 +106,7 @@ def kmeans(img):
     ##cv2.kmeans(data, K, critera, attempts)
     
     # Define criteria = ( type, max_iter = 100 , epsilon = 1.0 )
-    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 1.0)
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 200, 1.0)
 
     # set cluster number
     k=2
@@ -127,18 +134,30 @@ def  main():
     if args['filename']:
       filename = args['filename']
 
-    img = cv2.imread(filename)
-
-    ## Dialate
+    img = cv2.imread(filename, 0)
+    ##reverse
+#    img = ~img
+#    cv2.imshow("reversed_im", img)
+#    cv2.waitKey
+    #equalize
+    cladh = cv2.createCLAHE()
+    img = cladh.apply(img)
+    cv2.imshow("clahe equalized", img)
+    cv2.waitKey(0)
     img = dilate(img)
-    ## Brightness to get rid of some grey spots
+## Brightness to get rid of some grey spots
     img = increase_brightness(img)
-    ## Kmeans to figure out average between clusters (threshold value)
-    img = kmeans(img)
-    #Threshold to black and white
+ 
+    ##threshold
     img = threshold(img)
+    cv2.imshow("thresholded imgae", img)
+    cv2.waitKey(0)
+      #Threshold to black and white
+#    img = threshold(img)
+    ## Dialate
+    #img = dilate(img)
     cv2.imwrite("process_img.jpg", img)
-
+    cv2.destroyAllWindows()
 def testcode():
     infile=raw_input()
     im0=Image.open(infile)
