@@ -1,4 +1,11 @@
 #OpenCV section
+import cv2
+import numpy as np
+
+imageName = "./processedim"
+im = cv2.imread(imageName, cv2.IMREAD_GRAYSCALE)
+element = cv2.getStructuringElement(cv2.MORPH_RECT, 6, 1)
+cv2.erode(im, element)
 
 
 
