@@ -1,0 +1,41 @@
+Program Running Order:
+### indicates item is complete
+
+1. Capture Image
+    a. correctDimensions.py ### gui-based
+    #### works as intended but hard to specify point location in HighGUI 
+    
+    b. unrotate_music.py  ###
+    c. scale_image.py ###  scales image to allow reasonable processing speed
+2. Clean Image
+    a. convert.py
+    b. clean_image.sh (faster) ###
+
+3a. Remove staff lines
+    a. gameraStaffRemoval.py ###
+
+3b. Identify staff line location
+    a. gameraStaffLocator.py (ongoing, need normalized image or dilation)
+
+4a. Identify accidentals
+    a. nearest neighbor (pixel)
+    b. svm (pixel)
+    c. cascade (pixel)
+    d. nearest neighbor (harr-feature)
+    e. svm (harr-feature)
+    d. cascade (harr-feature)
+
+4b. Move staff lines according to transposition
+
+5a. Identify Note Name
+    a. location based guess
+    b. nearest neighbors to staff location examples
+
+6. Lookup table for shift
+
+7a. Erase old accidental and print new one
+
+7b. Erase old key signature and print new one. 
+   
+
+
