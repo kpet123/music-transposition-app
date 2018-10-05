@@ -3,7 +3,7 @@ import sys
 from gamera.core import *
 init_gamera()
 
-img = load_image("process_img.png")
+img = load_image(sys.argv[1])
 #new image img, so don't have to copy
 img = img.to_onebit()
 proj_arr = img.run_histogram("black", "vertical")
@@ -21,7 +21,9 @@ verticalStaffs.filter_short_runs(value-1, "black")
 verticalStaffs.filter_tall_runs(value+1, "black")
 
 img.subtract_images(verticalStaffs, in_place=True)
-img.save_PNG("gamera_no_staff.png")
+
+img.save_PNG(sys.argv[2])
+#uncomment following section to get staffs for analysis
 verticalStaffs.save_PNG("rawVerticalStaff.png")
 
 #Get locations of staff lines

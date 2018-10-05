@@ -1,0 +1,47 @@
+./negative_samples
+    Screenshot 2018-10-04 12.37.05.png
+    Screenshot 2018-10-04 12.37.10.png
+    Screenshot 2018-10-04 12.37.16.png
+    Screenshot 2018-10-04 12.37.31.png
+    Screenshot 2018-10-04 12.37.38.png
+    Screenshot 2018-10-04 12.37.42.png
+    Screenshot 2018-10-04 12.38.02.png
+    img1.png
+    img10.png
+    img11.png
+    img12.png
+    img13.png
+    img14.png
+    img15.png
+    img16.png
+    img17.png
+    img18.png
+    img19.png
+    img2.png
+    img20.png
+    img21.png
+    img22.png
+    img23.png
+    img24.png
+    img25.png
+    img26.png
+    img27.png
+    img28.png
+    img29.png
+    img3.png
+    img30.png
+    img31.png
+    img32.png
+    img33.png
+    img34.png
+    img35.png
+    img36.png
+    img38.png
+    img4.png
+    img40.png
+    img5.png
+    img6.png
+    img7.png
+    img8.png
+    img9.png
+negative_samples.txt

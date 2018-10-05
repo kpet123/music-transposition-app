@@ -1,0 +1,12 @@
+FLATS:
+
+data
+    flats
+        flats_positive_samples.txt          #annotated sections of flat_positive images
+        flat_positive_images
+            *NON-STAFF IMAGES*
+        n_samples.txt                       #lists contents of negative_samples
+        negative_samples
+            *IMAGES WITH NO FLATS*
+
+
