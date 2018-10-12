@@ -1,20 +1,72 @@
-#functions for haar image calculation, MUST REVERSE IMAGE TO COUNT BLACK PIXELS 
+#functions for haar image calculation, take image with 1 as black 0 as white 
 import cv2
 import numpy as np
 
 
+#differenc between top and bottom half
+def hor_2(src, integral, rows, cols):
 
-def hor_2(src, integral):
-    rows = src.shape[0]
-    cols =src.shape[1]
-    #print src.shape
-    top_val = integral[rows/2][cols]
-    #print top_val
-    bottom_val = integral[rows][cols]
-    #print bottom_val
-    difference = top_val-bottom_val
-    return difference/255 #normalizes
+    top_val = integral[rows/2][cols]# -0-0+0
+    bottom_val = integral[rows][cols] - top_val #-0+0
+    print bottom_val
+    difference = bottom_val-top_val
+    return difference 
 
+#difference between right and left half
+def vert_2(src, integral, rows, cols):
+
+    left_val = integral[rows][cols/2]
+    right_val = integral[rows][cols] - left_val
+    difference = right_val - left_val
+    return difference
+
+#difference between middle and edges (horizontally)
+def hor_3(src, integral, rows, cols):
+    first_third = rows/3
+    second_third = 2* first_third
+
+    first_third_val = integral[first_third][cols]
+    second_third_val = integral[second_third][cols] - first_third_val
+    third_third_val = integral[rows][cols] - integral[second_third][cols]
+    difference = first_third_val + third_third_val - second_third_val
+    return difference
+
+#difference between middle and edges (vertically)
+def vert_3(src, integral, rows, cols):
+    first_third = cols/3
+    second_third = 2* first_third
+
+    first_third_val = integral[rows][first_third]
+    second_third_val = integral[rows][second_third] - first_third_val
+    third_third_val = integral[rows][cols] - integral[rows][second_third]
+    difference = first_third_val + third_third_val - second_third_val
+    return difference
+
+#    _ _ 
+#   |x| |
+#   | |x|
+#    - - 
+#space with x minus without x
+
+def quarters(src, integral, rows, cols):
+    hrows = rows/2
+    hcols = cols/2
+
+    topLeftQuarter = integral[hrows][hcols]
+    topRightQuarter = integral[hrows][cols] - topLeftQuarter
+    bottomLeftQuarter = integral[rows][hcols] - topLeftQuarter
+    bottomRightQuarter = integral[rows][cols] - integral[hrows][cols] - integral[rows][hcols] \
+            +topLeftQuarter
+
+    return (topLeftQuarter+bottomRightQuarter)-(topRightQuarter+bottomLeftQuarter)
+#    _ _ _
+#   |x| |x|
+#   | |x| |
+#   |x| |x|
+#    - - -
+# space with x minus without x
+
+#def checker1(src, integral, rows, cols): :#TODO implement
 
 
 def getHaarFeatures(src):

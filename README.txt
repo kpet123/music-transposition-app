@@ -2,26 +2,48 @@ Program Running Order:
 ### indicates item is complete
 
 1. Capture Image
-    a. correctDimensions.py 
+    a. correctDimensions.py ### gui-based
     #### works as intended but hard to specify point location in HighGUI 
+    
+    b. unrotate_music.py  ###
+    c. scale_image.py ###  scales image to allow reasonable processing speed
 2. Clean Image
     a. convert.py
-    b. clean_image.sh (faster) ###
-
+    b. clean_image.sh (faster) ### uses imagemajik to clean image
+    C. full_clean_image.sh ### composite that includes scaling, cleaning, and staff removal
 3a. Remove staff lines
-    a. gameraStaffRemoval.py ###
+    a. gameraStaffRemoval.py ### removes staff lines from image
 
 3b. Identify staff line location
     a. gameraStaffLocator.py (ongoing, need normalized image or dilation)
 
 4a. Identify accidentals
-    a. nearest neighbor (pixel)
+    a. gamera_classifier.py #nearest neighbor, gamera
+        1. classifiers
+            1. knn_glyphs.xml ### training file, can keep adding. CURRENTLY BASED OFF HINDEMITH 3
+            2.knnFullSymbolGlyphs.xml   
+                a. from :
+                    - clar_hindemith-symphony-bflat3.png
+                    - louffler_vla2_no_staff
+                    - strauss_no_staff.png
+                    - louffler_score11.png
+                    - maslanka_tears_2.png 
     b. svm (pixel)
     c. cascade (pixel)
-    d. nearest neighbor (harr-feature)
+    d. nearest neighbor- haar feature
+        1. C++ plugin in gamera directory #XXXX very complicated
+        2. haar.py #python plugin
+        3. gamera_classifier2.py 
+            a. ### Uses gamera k-nearest neighbor for size determination then applies haar nearest neighbor thru opencv 
+            b. #TODO get this to work    
     e. svm (harr-feature)
-    d. cascade (harr-feature)
-
+    d. classifier_creation.sh  #opencv cascade classifier based on haar features
+        1. #can't get it to work + need to clean positive set
+        2. #folders: ./data/flats
+    f. YOLO : https://www.learnopencv.com/deep-learning-based-object-detection-using-yolov3-with-opencv-python-c/?ck_subscriber_id=272181659
+    g. mask R-CNN: find actual object using deep learning
+        https://www.learnopencv.com/deep-learning-based-object-detection-and-instance-segmentation-using-mask-r-cnn-in-opencv-python-c/?ck_subscriber_id=272181659
+        
 4b. Move staff lines according to transposition
 
 5a. Identify Note Name
