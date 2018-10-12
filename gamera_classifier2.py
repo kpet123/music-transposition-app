@@ -46,7 +46,6 @@ size_predictor = []
 # Determine size of components using glyph guessing
 for c in component_list:
 
-    #
     guess = classifier.guess_glyph_automatic(c)
 #    print guess
     if  guess[0][0][0] > .015:
@@ -58,18 +57,15 @@ candidates = [] #for glyphs conforming to average size
 for c in component_list:
     size = c.ncols*c.nrows 
     if size > min(size_predictor)*.5 and size < max(size_predictor)*2: #rule out by size
-        arr = c.to_numpy()
+        arr = c.to_numpy()/c.label #1s and 0s, 1 is black
+        print arr
         candidates.append(arr)
 
 
 #test haar
 
 for arr in candidates:
-    print type(arr)
-    arr = ~arr
-    print arr.shape
-    cv2.imshow("image", arr)
-    cv2.waitKey(0)
+
     integral = cv2.integral(arr)
     print h.hor_2(arr, integral)
 
