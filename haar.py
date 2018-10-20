@@ -23,7 +23,7 @@ def vert_2(src, integral, rows, cols):
 #difference between middle and edges (horizontally)
 def hor_3(src, integral, rows, cols):
     first_third = rows/3
-    second_third = 2* first_third
+    second_third = rows*2/3
 
     first_third_val = integral[first_third][cols]
     second_third_val = integral[second_third][cols] - first_third_val
@@ -34,7 +34,9 @@ def hor_3(src, integral, rows, cols):
 #difference between middle and edges (vertically)
 def vert_3(src, integral, rows, cols):
     first_third = cols/3
-    second_third = 2* first_third
+    #print first_third
+    second_third = cols*2/3
+    #print second_third
 
     first_third_val = integral[rows][first_third]
     second_third_val = integral[rows][second_third] - first_third_val
