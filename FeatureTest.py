@@ -186,34 +186,33 @@ print_result("im5", im5, integral5, h.vert_3, 8)
 print_result("im6", im6, integral6, h.vert_3, 0)
 
 ######im7
-print_result("im7", im7, integral7, h.vert_3, 4)
+print_result("im7", im7, integral7, h.vert_3, 5)
 
 
 
 #TESTING h.quarters
 print "\n********TESTING h.quarters********"
-#TODO: implement
 
 ######im1
-print_result("im1", im1, integral1, h.vert_3, 4)
+print_result("im1", im1, integral1, h.quarters, 0)
 
 ######im2
-print_result("im2", im2, integral2, h.vert_3, 0)
+print_result("im2", im2, integral2, h.quarters, 0)
 
 ######im3
-print_result("im3", im3, integral3, h.vert_3, -2)
+print_result("im3", im3, integral3, h.quarters, 10)
 
 ######im4
-print_result("im4", im4, integral4, h.vert_3, 4)
+print_result("im4", im4, integral4, h.quarters, 16)
 
 ######im5
-print_result("im5", im5, integral5, h.vert_3, 8)
+print_result("im5", im5, integral5, h.quarters, 0)
 
 ######im6
-print_result("im6", im6, integral6, h.vert_3, 0)
+print_result("im6", im6, integral6, h.quarters, 0)
 
 ######im7
-print_result("im7", im7, integral7, h.vert_3, 4)
+print_result("im7", im7, integral7, h.quarters, 1)
 
 
 

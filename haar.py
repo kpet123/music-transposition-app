@@ -8,7 +8,7 @@ def hor_2(src, integral, rows, cols):
 
     top_val = integral[rows/2][cols]# -0-0+0
     bottom_val = integral[rows][cols] - top_val #-0+0
-    print bottom_val
+   # print bottom_val
     difference = bottom_val-top_val
     return difference 
 
@@ -72,12 +72,17 @@ def quarters(src, integral, rows, cols):
 
 
 def getHaarFeatures(src):
-    src = ~src #reverse so integral image applies to black pixels
+#    src = ~src #reverse so integral image applies to black pixels
     integral = cv2.integral(src)
     feature_dict = {}
-
+    rows = src.shape[0]
+    cols = src.shape[1]
     #dictionary of features + feature value
-    feature_dict = { 'hor_2':hor2(src, integral), \
+    feature_dict = { 'hor_2':hor_2(src, integral, rows, cols), \
+                     'vert_2':vert_2(src, integral, rows, cols), \
+                     'hor_3':hor_3(src, integral, rows, cols),\
+                     'vert_3':vert_3(src, integral, rows, cols),\
+                     'quarters':quarters(src,integral, rows, cols)
                       }
     return feature_dict
 
