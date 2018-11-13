@@ -6,7 +6,7 @@ import string
 def main():
 
     #read in opencv annotation file
-    filepath = "./data/flats/raw_positive_samples.txt"
+    filepath = "./data/flats/testfile.txt"
     print "test0"
     with open(filepath, "r") as f:
 
@@ -30,7 +30,7 @@ def main():
                 print coor
                 training_im = music_file[int(coor[1]): int(coor[1])+int(coor[3]), \
                         int(coor[0]) :int(coor[0])+int(coor[2])]
-                training_im_path = "data/flats/trainingImageFolder/image"+str(l1)+\
+                training_im_path = "data/flats/trainingImageFolder/batch2image"+str(l1)+\
                         "-"+str(l2)+".png"
                 cv2.imwrite(training_im_path, training_im)
                 index+=4
