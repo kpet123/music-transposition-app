@@ -155,26 +155,3 @@ e.  In addition, global operators can also be applied to the entire
             is represented by the Bflat key signature)
 
 
-2.Proof
-
-a. Define Transposition
-    
-    A Transposition is a function that takes a set of notes and shifts the frequency while 
-    keeping location and degree constant
-
-    For example: 
-        TRANSPOSITION_n(FULL) where n /in frequency defines a new set T where 
-            (L, D, F) -> (L, D, F+(n-c)), where L= location, D = degree, F= frequency 
-            and c is the constant frequency detail in 1a   
-       
-
-b.  Posit: If  TRANSPOSITION_n were applied onto a music string, the string would 
-    retain the same length and retain the same position of local operations; 
-    no new local operations would need to be added 
-    
-
-
-
-
-
-
