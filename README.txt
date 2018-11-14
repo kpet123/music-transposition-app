@@ -1,3 +1,7 @@
+This program aims to transpose sheet music in real time. 
+
+
+
 Program Running Order:
 ### indicates item is complete
 
