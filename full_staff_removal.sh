@@ -19,6 +19,9 @@ python2 scale_image.py $im_raw "a.png"
 #clean with imagemajik
 convert "a.png" -level 45% "b.png"
 
+#staff removal
+python2 gameraStaffRemoval.py "b.png" $output
+
 #clean
 rm a.png b.png
 
