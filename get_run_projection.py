@@ -1,4 +1,4 @@
-#creates projection and pickles it because can't get skikit learn to work with python 2.7
+#creates horizontal projection and pickles it because can't get skikit learn to work with python 2.7
 #Gamera section
 #Base code taken from Gamera tutorial excercise 2.3, which highlighted staff lines in red 
 import sys
