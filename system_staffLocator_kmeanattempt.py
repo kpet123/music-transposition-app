@@ -17,13 +17,20 @@ line_locations=[]
 for system in systemList:
     staffs2D = system['staffs2D']
     staffs2D = staffs2D.astype(int) 
+
+######TRY WITH LAMBDA
 #    makeNaN = lambda val: np.nan if val==0 else val
 #    makeNaN(staffs2D)
-    
-    for rows in staffs2D:
-        for cols in rows:
-            if staffs2D[cols, rows] ==0:
-                staffs2D[cols, rows] = np.nan
+#####TRY WITH FOR LOOP    
+#    for rows in staffs2D:
+#        for cols in rows:
+#            if staffs2D[cols, rows] ==0:
+#                staffs2D[cols, rows] = np.nan
+
+    for (x,y), value in np.ndenumerate(staffs2D):
+        if value == 0:
+            value ==np.nan
+
 
     print(staffs2D)
     kmeans = KMeans(n_clusters=5).fit(staffs2D)
