@@ -6,7 +6,7 @@
 from sklearn.cluster import KMeans
 import sys
 import pickle
-import numpy
+import numpy as np
 
 def main():
     #load pickled systems
@@ -26,18 +26,22 @@ def main():
 def gradientloc(staffs1D):
     #enumerate staffs1D and delete areas where there is no data 
     #another strategy is taking second derivative...look into
-    staff_gradient=numpy.diff(staffs1D)
-    staff_features = np.ndenumerate(staff_gradient)
+    staff_gradient=np.diff(staffs1D)
+    staff_gradient=list(staff_gradient)
+    staff_features = []
+    i=0
+    while i< len(staff_gradient):
+        staff_features.append([i, staff_gradient[i]])
+        i+=1
     #sort by gradient value
-    np.argsort(staff_features, axis=1)
+    sort_gradient = sorted(staff_features, key=lambda tup: tup[1])
     #highest gradients should correspond to biggest jumps; i.e. beginning of line
-    fivelines=staff_features(len(staff_features-5):len(staff_features))
-    #slice x values
-    linelocs= fivelines[:1]
+    lines = sort_gradient[len(sort_gradient)-5 :len(sort_gradient)]
+    #convert to array to slice x values
+    linelocs= np.array(lines)[:,0]
+    print(linelocs)
     #sort 
-
-
-    return linelocs
+    return sorted(linelocs)
 
  
 def kmeansloc(staffs2D):
@@ -67,4 +71,4 @@ def kmeansloc(staffs2D):
     print("---------")
 
 
-
+main()
