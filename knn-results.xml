@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gamera-database version="2.0">
+  <glyphs>
+    <glyph uly="3" ulx="7" nrows="61" ncols="15">
+      <ids state="UNCLASSIFIED">
+      </ids>
+      <data>
+        0 2 13 2 13 2 13 2 13 2 13 2 13 2 13 2 13 2 13 2 13 2 13 2 13 2 13 2
+        11 4 11 4 4 11 4 78 4 11 4 6 9 6 9 4 11 4 11 4 11 4 11 4 11 4 11 4 11
+        4 11 4 11 4 11 4 11 4 7 8 7 77 2 13 2 6 9 6 9 2 13 2 13 2 13 2 13 2
+        13 2 13 2 13 2 13 2 13 2 13 2 13 2 13 2 13 2 13 2 13 2 
+      </data>
+    </glyph>
+  </glyphs>
+</gamera-database>

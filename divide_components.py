@@ -27,7 +27,7 @@ def displayConnectedComponents(im):
     cv2.waitKey(0)
    
 # Read image as grayscale
-im = cv2.imread("./process_img.jpg", cv2.IMREAD_GRAYSCALE)
+im = cv2.imread("./thresh.jpg", cv2.IMREAD_GRAYSCALE)
 
 cv2.imshow("Original", im)
 # Threshold Image
