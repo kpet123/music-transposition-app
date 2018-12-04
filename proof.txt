@@ -26,11 +26,11 @@ Semi-Formal Proof of Minimum Information for Calculating Key Transpositon in Wes
     These members are:  
 
         location of  member l(x): C    D    E     F     G    A      B        
-        degree of member d(x):   d0   d2   d4    d7    d8    10     12
-        frequency of member f(x):f0   f2   f4    f7    f9    f10    f12
+        degree of member d(x):   d0   d2   d4    d5    d7    d9    d12
+        frequency of member f(x):f0   f2   f4    f5    f7    f9    f12
 
 
-       Define V: subset of FULL refered to above
+       Define V: subset of FULL refered to above, corresponds to notes in the key of C
 
 
     d.  V_(location) is used as an alphabet to create strings (in musical terms this "string" refers to consecutive notes on a staff) 
@@ -52,7 +52,16 @@ Semi-Formal Proof of Minimum Information for Calculating Key Transpositon in Wes
     Thus a music string consists of a list of locations and operators
  
 
-    e.  In addition, global operators can also be applied to the entire string (aka key signature). There are two valid global operations (one with sharps and one with flats) corresponding to every note in FULL 
+    e.  In addition, global operators can also be applied to the entire string (aka key signature). Key signatures allows for the creation of set V_keysignature where the scale degrees (di) does not need to be based on the fudemental frequency (f0) in order to directly be represented as a location in the staff (L). 
+    
+    For example, a set of notes making up the key of G : 
+    {(G,d0,f8),  (A, d2, f10), (B, d4, f12), (C,d5, f0), (D, d7, f2),  (E, d9, f4), (F#, d12, f6)} 
+    
+    can be mapped from V shifting d0 so it corresponds to G and by applying a global sharp to the position of F 
+    
+    
+    
+    There are two valid global operations (one with sharps and one with flats) corresponding to every note in FULL 
     
        Global operator are defined:
 
@@ -94,23 +103,24 @@ Semi-Formal Proof of Minimum Information for Calculating Key Transpositon in Wes
             
     f. Transpositions are a mapping that shift f0 ("key of the sheet music") but retains the relative positions of notes in the string    
 
-    Define:  TRANSPOSITION(f_new, string) is a mapping from V to V'  s.t. 
+    Define:  TRANSPOSITION(f0', string) is a mapping from V to V'  s.t. 
     V = {(d0, f0), (d1, f1)....(d12, f12)} and 
-    V'= {(d0, f_new), (d1, f_new+2).....(d12, f_new+12)}
+    V'= {(d0, f0'), (d1, f0'+1).....(d12, f0'+2)}
         
 
 2.Proof
 
-    a.  Posit: One could apply TRANSPOSITION(f_new, string) s.t. 1) the coordinates of L (locations of note on staff) in V are will retain the same relative positions (i.e. staffline positions could shift while pitch differences between adjacent notes remain constant) 2) notes with local operations would retain a local operation, and 3) no new local operations would need to be added 
+    a.  Posit: One could apply TRANSPOSITION(f', string) s.t. 1) the coordinates of L (locations of note on staff) in V are will retain the same relative positions (i.e. staffline positions could shift while pitch differences between adjacent notes remain constant) 2) notes with local operations would retain a local operation, and 3) no new local operations would need to be added 
     
         
     Strategy: 
-    b. Given string s on music in the key of k (f0=k) and new key= n (f0'=n):
+    b. Given string s on music in the key of k (f0=k) and new key= n (f'=n):
 
             1. diff = n-k
-            2. Move s upwards diff positions on the staff
+            2. Move s upwards diff positions on the staff 
+                    - this sets condition 1 because relative spacing between note locations is preserved
             3. Apply global operation corresponding with n to the string 
-                                    - Since the global operation (key signature) associated with a key allows notes in V of that key to sit on the staff without local operations, this ensures notes previously without local operations will maintain their relative positions
+                    [- Since the global operation (key signature) associated with a key allows notes in V of that key to sit on the staff without local operations, this ensures notes previously without local operations will maintain their relative positions
                                     
              4. For notes with local operations, apply flats or sharps until the original relative positions are acheived. 
              
