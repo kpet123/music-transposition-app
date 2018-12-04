@@ -38,10 +38,10 @@ Semi-Formal Proof of Minimum Information for Calculating Key Transpositon in Wes
     The operators can be:
    
       <sharp>,   where <sharp>(x) -> 
-            d(x) = x+1 and f(x) = frequency up a semitone
+            d(x) = x+1 and f(x) = x+1
 
       <flat>, where <flat>(x) ->
-            d(x) = x-1 and f(x) = frequency down a semitone
+            d(x) = x-1 and f(x) = x+1
 
       <natural>, where <natural>(x) ->
             d(x) and f(x) are the degree and frequency specified in V
