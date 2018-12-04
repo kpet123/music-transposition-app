@@ -108,12 +108,15 @@ b.  Posit: If  TRANSPOSITION were applied onto a music notes on a staff, the res
     Proving (b)
 c. Given string s on music in the key of k (f0=k) and new key= n (f0'=n):
 
-            1. diff = n-k 
+            1. diff = 
             2. Move s upwards diff positions on the staff
             3. Apply global operation corresponding with n to the string 
                                     - Since the global operation (key signature) associated with a key allows notes in V of that key to sit on the staff without local operations, this ensures notes previously without local operations will maintain their relative positions
                                     
              4. For notes with local operations, apply flats or sharps until the original relative positions are acheived. 
+             
+             
+             Since step (3) ensured the relative positions of the non-accidental notes are preserved and step (4) ensured the relative positions of the accidental notes are preserved and [accidentaled notes ] and [non-accidentaled notes] are complementary, all notes have maintained their relative position after f0 shifted to n in step (3)
             
             
             
