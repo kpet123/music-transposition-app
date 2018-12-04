@@ -4,33 +4,33 @@ Semi-Formal Proof of Minimum Information for Calculating Key Transpositon in Wes
 1. Defining base situation
 
 
-a. Written music notation is based on notes located on a staffline
+    a. Written music notation is based on notes located on a staffline
 
-b. Every note can be represented as (location, degree, frequency) where
+    b. Every note can be represented as (location, degree, frequency) where
             
         location -> ordered set representing location on staff
             location = {C, D, E, F, G, A, B}
 
-        degree -> ordred set representing numerical representation within Western 12-tone scale,
-            degree = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}, where the distance between 
+        degree -> orderd set representing numerical representation within Western 12-tone scale,
+            degree = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1}, each degree is 1 semitone 
 
         frequency -> ordered set representing frequency in hz of note that we hear. The difference between each pitch is set as 1 (semitone) to keep consistant units with degree. For this excercise the size of the set will equal 12, corresponding to 1 octave
             frequency = {f0, f1, f2, f3, f4, f5, f6, f7,  f8, f9, f10, f11, }, where the the value of f0 is known as the 'key' of the sheet music 
            
    
-b.  Western music is based off an ordered set of notes of size 12, which will henceforth be refered to as FULL. 
+    c.  Define FULL: set of 12 notes 
 
   
 c.  Only 7 out of the 12 members of the set have a coordinate for location. 
 
     These members are:  
 
-        location of  member l(x):C    D    E     F     G    A      B        
-        degree of member d(x):   1    3    5     6     8    10     12
-        frequency of member f(x):f1   f3   f5    f6    f8    f10    f12
+        location of  member l(x): C    D    E     F     G    A      B        
+        degree of member d(x):   d0   d2   d4    d7    d8    10     12
+        frequency of member f(x):f0   f2   f4    f7    f9    f10    f12
 
 
-******This subset of FULL will be refered to as visualizable subset (V)****
+       Define V: subset of FULL refered to above
 
 
 d.  V_(location) is used as an alphabet to create strings (in musical terms this "string" refers to consecutive notes on a staff) 
@@ -46,14 +46,13 @@ d.  V_(location) is used as an alphabet to create strings (in musical terms this
       <natural>, where <natural>(x) ->
             d(x) and f(x) are the degree and frequency specified in V
 
-*******This set of local operators will be refered to as O*******
+************** Define A: above set of local operators or accidentals***************
 
 
     Thus a music string consists of a list of locations and operators
  
 
-e.  In addition, global operators can also be applied to the entire 
-    string (aka key signature). There are two global operations (one with sharps and one with flats) corresponding to every note in FULL 
+e.  In addition, global operators can also be applied to the entire string (aka key signature). Global operators consist of a list of sharps or flats applied to the entirely of the string. There are valid two global operations (one with sharps and one with flats) corresponding to every note in FULL 
     
         A global operator is executed thus: 
         
