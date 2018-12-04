@@ -53,7 +53,7 @@ d.  V_(location) is used as an alphabet to create strings (in musical terms this
  
 
 e.  In addition, global operators can also be applied to the entire 
-    string (aka key signature) 
+    string (aka key signature). There are two global operations (one with sharps and one with flats) corresponding to every note in FULL 
     
         A global operator is executed thus: 
         
@@ -96,31 +96,25 @@ e.  In addition, global operators can also be applied to the entire
 
 a. Define Transposition Problem
     
-    Transposition(M -> N) = Input string M whose f0 value ("key") and 
-
+    define function TRANSPOSITION(f_new, string) that shifts f0 ("key") but retains the relative positions of notes in the string 
     For example: 
-        TRANSPOSITION_n(FULL) where n /in frequency defines a new set T where 
-            [(l1, d1, f1), (l2, d2, f2).....(l12, d12, f12)]  -> [(ln, d1, fn), (ln+1, d2, fn+1)......(ln+12, d12, fn+12)] 
-            where l is a location, d is a degree, and f is a frequency. Note that the numerical system is mod12
-    
+        
 
-b.  Posit: If  TRANSPOSITION_n were applied onto a music string, the string would 
-    retain the same length, retain the same distances between adjacent characters, retain the same position of local operations; 
-    no new local operations would need to be added 
+b.  Posit: If  TRANSPOSITION were applied onto a music notes on a staff, the result can be notated in such a way that a) staffline positions could shift while pitch differences between adjacent notes remain constant, b) notes with local operations would retain a local operation, and c) no new local operations would need to be added 
+    
+    a) and c) are trivial because adding one or more <sharp>s, <flats>s, or a <natural> can allow a note of any frequency appear at any location on the staff
     
     
-    
-c. Proving Each Section of 2b.
+    Proving (b)
+c. Given string s on music in the key of k (f0=k) and new key= n (f0'=n):
 
-            1. String retains same length after transposition
-                        TRANSPOSITION is one-to-one definitionally,therefore will end up with same number of characters
-                        
-            2. Adjacent characters retain same distances
-                        Degree specifies relative position and is not effected by TRANSPOSE
+            1. diff = n-k 
+            2. Move s upwards diff positions on the staff
+            3. Apply global operation corresponding with n to the string 
+                                    - Since the global operation (key signature) associated with a key allows notes in V of that key to sit on the staff without local operations, this ensures notes previously without local operations will maintain their relative positions
+                                    
+             4. For notes with local operations, apply flats or sharps until the original relative positions are acheived. 
             
-            3. String retains same position of local operations
-                        
-                         
             
             
             
