@@ -12,10 +12,10 @@ b. Every note can be represented as (location, degree, frequency) where
             location = {C, D, E, F, G, A, B}
 
         degree -> ordred set representing numerical representation within Western 12-tone scale,
-            degree = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+            degree = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}, where the distance between 
 
-        frequency -> ordered set representing frequency in hz of note that we hear. The difference between each pitch is a semitone. For this excercise the size of the set will equal 12, corresponding to 1 octave
-            frequency = {f1, f2, f3, f4, f5, f6, f7,  f8, f9, f10, f11, f12}, where the the value of f0 is known as the 'key' of the sheet music 
+        frequency -> ordered set representing frequency in hz of note that we hear. The difference between each pitch is set as 1 (semitone) to keep consistant units with degree. For this excercise the size of the set will equal 12, corresponding to 1 octave
+            frequency = {f0, f1, f2, f3, f4, f5, f6, f7,  f8, f9, f10, f11, }, where the the value of f0 is known as the 'key' of the sheet music 
            
    
 b.  Western music is based off an ordered set of notes of size 12, which will henceforth be refered to as FULL. 
@@ -96,7 +96,7 @@ e.  In addition, global operators can also be applied to the entire
 
 a. Define Transposition Problem
     
-    Funtion
+    Transposition(M -> N) = Input string M whose f0 value ("key") and 
 
     For example: 
         TRANSPOSITION_n(FULL) where n /in frequency defines a new set T where 
