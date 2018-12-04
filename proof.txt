@@ -1,6 +1,10 @@
 
 Semi-Formal Proof of Minimum Information for Calculating Key Transpositon in Western Music
 
+
+
+
+**********PLEASE SEE proof.pdf FOR FORMATTED VERSION IN LaTEx WITHOUT ERRORS************************
 1. Defining base situation
 
 
