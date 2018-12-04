@@ -18,10 +18,10 @@ Semi-Formal Proof of Minimum Information for Calculating Key Transpositon in Wes
             frequency = {f0, f1, f2, f3, f4, f5, f6, f7,  f8, f9, f10, f11, }, where the the value of f0 is known as the 'key' of the sheet music 
            
    
-    c.  Define FULL: set of 12 notes 
+         Define FULL: set of 12 notes 
 
   
-c.  Only 7 out of the 12 members of the set have a coordinate for location. 
+    c.  Only 7 out of the 12 members of the set have a coordinate for location. 
 
     These members are:  
 
@@ -33,7 +33,7 @@ c.  Only 7 out of the 12 members of the set have a coordinate for location.
        Define V: subset of FULL refered to above
 
 
-d.  V_(location) is used as an alphabet to create strings (in musical terms this "string" refers to consecutive notes on a staff) 
+    d.  V_(location) is used as an alphabet to create strings (in musical terms this "string" refers to consecutive notes on a staff) 
     To represent other members of FULL within a string, one can apply local operators (preoperators) to the locations in V. 
     The operators can be:
    
@@ -52,15 +52,16 @@ d.  V_(location) is used as an alphabet to create strings (in musical terms this
     Thus a music string consists of a list of locations and operators
  
 
-e.  In addition, global operators can also be applied to the entire string (aka key signature). Global operators consist of a list of sharps or flats applied to the entirely of the string. There are valid two global operations (one with sharps and one with flats) corresponding to every note in FULL 
+    e.  In addition, global operators can also be applied to the entire string (aka key signature). There are two valid global operations (one with sharps and one with flats) corresponding to every note in FULL 
     
-        A global operator is executed thus: 
-        
-          Given op is <sharp> or <flat>, key is a subset of V_location (notes in key signature), and s is a string, 
-          op will be applied locally to every element of key in s
+       Global operator are defined:
+
+             op_key(s),  where op /in O, key /in V_location, and s is a string
+
+        ->  op will be applied locally to every element of key in s
 
 
-    To be a valid global operator, key is constrained in that 
+    To be a valid global operator, the key is constrained in that 
     if every member of key's degree shifts to its post-operated value,
     the degrees in the set consisting of  op(key) + (V - key)  will still map
     to V via addition or subtraction
@@ -90,24 +91,23 @@ e.  In addition, global operators can also be applied to the entire string (aka 
             is represented by the Bflat key signature)
             
             
+            
+    f. Transpositions are a mapping that shift f0 ("key of the sheet music") but retains the relative positions of notes in the string    
+
+    Define:  TRANSPOSITION(f_new, string) is a mapping from V to V'  s.t. 
+    V = {(d0, f0), (d1, f1)....(d12, f12)} and 
+    V'= {(d0, f_new), (d1, f_new+2).....(d12, f_new+12)}
+        
 
 2.Proof
 
-a. Define Transposition Problem
+    a.  Posit: One could apply TRANSPOSITION(f_new, string) s.t. 1) the coordinates of L (locations of note on staff) in V are will retain the same relative positions (i.e. staffline positions could shift while pitch differences between adjacent notes remain constant) 2) notes with local operations would retain a local operation, and 3) no new local operations would need to be added 
     
-    define function TRANSPOSITION(f_new, string) that shifts f0 ("key") but retains the relative positions of notes in the string 
-    For example: 
         
+    Strategy: 
+    b. Given string s on music in the key of k (f0=k) and new key= n (f0'=n):
 
-b.  Posit: If  TRANSPOSITION were applied onto a music notes on a staff, the result can be notated in such a way that a) staffline positions could shift while pitch differences between adjacent notes remain constant, b) notes with local operations would retain a local operation, and c) no new local operations would need to be added 
-    
-    a) and c) are trivial because adding one or more <sharp>s, <flats>s, or a <natural> can allow a note of any frequency appear at any location on the staff
-    
-    
-    Proving (b)
-c. Given string s on music in the key of k (f0=k) and new key= n (f0'=n):
-
-            1. diff = 
+            1. diff = n-k
             2. Move s upwards diff positions on the staff
             3. Apply global operation corresponding with n to the string 
                                     - Since the global operation (key signature) associated with a key allows notes in V of that key to sit on the staff without local operations, this ensures notes previously without local operations will maintain their relative positions
