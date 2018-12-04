@@ -3,22 +3,22 @@ Semi-Formal Proof of Minimum Information for Calculating Key Transpositon in Wes
 
 1. Defining base situation
 
-a. Every note can be represented as (location, degree, frequency) where
+
+a. Written music notation is based on notes located on a staffline
+
+b. Every note can be represented as (location, degree, frequency) where
             
-        location -> location on staff
+        location -> ordered set representing location on staff
             location = {C, D, E, F, G, A, B}
 
-        degree -> numerical representation within Western 12-tone scale,
+        degree -> ordred set representing numerical representation within Western 12-tone scale,
             degree = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
 
-        frequency -> frequency in hz of note that we hear. For this 
-        excercise the size of the set will equal 12, corresponding to 
-        1 octave
-            frequency = {c, csharp, d, dsharp, e, f, fsharp,  g, gsharp
-                         a, asharp,  b}
+        frequency -> ordered set representing frequency in hz of note that we hear. The difference between each pitch is a semitone. For this excercise the size of the set will equal 12, corresponding to 1 octave
+            frequency = {f1, f2, f3, f4, f5, f6, f7,  f8, f9, f10, f11, f12}, where the the value of f0 is known as the 'key' of the sheet music 
+           
    
-b.  Western music is based off an ordered set of notes of size 12, which
-    will henceforth be refered to as FULL. 
+b.  Western music is based off an ordered set of notes of size 12, which will henceforth be refered to as FULL. 
 
   
 c.  Only 7 out of the 12 members of the set have a coordinate for location. 
@@ -27,22 +27,21 @@ c.  Only 7 out of the 12 members of the set have a coordinate for location.
 
         location of  member l(x):C    D    E     F     G    A      B        
         degree of member d(x):   1    3    5     6     8    10     12
-        frequency of member f(x):c    d    e     f     g    a       b
+        frequency of member f(x):f1   f3   f5    f6    f8    f10    f12
 
 
 ******This subset of FULL will be refered to as visualizable subset (V)****
 
 
-d.  V_location is used as an alphabet to create strings 
-    To represent other members of FULL within a string, one can apply 
-    local operators (preoperators) to the locations in V. 
+d.  V_(location) is used as an alphabet to create strings (in musical terms this "string" refers to consecutive notes on a staff) 
+    To represent other members of FULL within a string, one can apply local operators (preoperators) to the locations in V. 
     The operators can be:
    
       <sharp>,   where <sharp>(x) -> 
-            d(x) = x+1 and f(x) = frequency shifted to the right
+            d(x) = x+1 and f(x) = frequency up a semitone
 
       <flat>, where <flat>(x) ->
-            d(x) = x-1 and f(x) = frequency shifted to the left
+            d(x) = x-1 and f(x) = frequency down a semitone
 
       <natural>, where <natural>(x) ->
             d(x) and f(x) are the degree and frequency specified in V
@@ -56,17 +55,16 @@ d.  V_location is used as an alphabet to create strings
 e.  In addition, global operators can also be applied to the entire 
     string (aka key signature) 
     
-        Global operator are defined: 
+        A global operator is executed thus: 
         
-             op_key(s),  where op /in O, key /in V_location, and s is a string
-        
-        ->  op will be applied locally to every element of key in s
+          Given op is <sharp> or <flat>, key is a subset of V_location (notes in key signature), and s is a string, 
+          op will be applied locally to every element of key in s
 
 
     To be a valid global operator, key is constrained in that 
     if every member of key's degree shifts to its post-operated value,
-    the degrees in the set consisting of (key + (V - key)) will still map
-    to FULL via addition or subtraction
+    the degrees in the set consisting of  op(key) + (V - key)  will still map
+    to V via addition or subtraction
 
     For example:   
             
@@ -85,9 +83,47 @@ e.  In addition, global operators can also be applied to the entire
             Adding 2 to each value gives you 
                 {1+2, 3+2, 4+2, 6+2, 8+2, 10+2, 11+2}
 
-               ={3,   5,   6,   8,   10,  12,   1} = FULL 
+               ={3,   5,   6,   8,   10,  12,   1} = V
                 (Remember 13mod12 is 1) 
 
             Thus since N maps to FULL, <flat>_{B,E} is a valid global 
             operation. (in musical terms, this is the key of B flat and 
             is represented by the Bflat key signature)
+            
+            
+
+2.Proof
+
+a. Define Transposition Problem
+    
+    Funtion
+
+    For example: 
+        TRANSPOSITION_n(FULL) where n /in frequency defines a new set T where 
+            [(l1, d1, f1), (l2, d2, f2).....(l12, d12, f12)]  -> [(ln, d1, fn), (ln+1, d2, fn+1)......(ln+12, d12, fn+12)] 
+            where l is a location, d is a degree, and f is a frequency. Note that the numerical system is mod12
+    
+
+b.  Posit: If  TRANSPOSITION_n were applied onto a music string, the string would 
+    retain the same length, retain the same distances between adjacent characters, retain the same position of local operations; 
+    no new local operations would need to be added 
+    
+    
+    
+c. Proving Each Section of 2b.
+
+            1. String retains same length after transposition
+                        TRANSPOSITION is one-to-one definitionally,therefore will end up with same number of characters
+                        
+            2. Adjacent characters retain same distances
+                        Degree specifies relative position and is not effected by TRANSPOSE
+            
+            3. String retains same position of local operations
+                        
+                         
+            
+            
+            
+    
+
+
