@@ -120,9 +120,10 @@ Semi-Formal Proof of Minimum Information for Calculating Key Transpositon in Wes
             2. Move s upwards diff positions on the staff 
                     - this sets condition 1 because relative spacing between note locations is preserved
             3. Apply global operation corresponding with n to the string 
-                    [- Since the global operation (key signature) associated with a key allows notes in V of that key to sit on the staff without local operations, this ensures notes previously without local operations will maintain their relative positions
+                    - Since the global operation (key signature) associated with a key allows notes in V of that key to sit on the staff without local operations (see 1e), this step ensures condition 3) by mapping all notes previous in V to V_keysignature
                                     
-             4. For notes with local operations, apply flats or sharps until the original relative positions are acheived. 
+             4. For notes with local operations, apply flats or sharps until the original relative positions are achieved 
+                        - Since the key signature mapping detailed in 1e is one-to-one, all notes previously not in V are not in V_keysignature, so they will retain some sort of local operation, ensuring 2) 
              
              
              Since step (3) ensured the relative positions of the non-accidental notes are preserved and step (4) ensured the relative positions of the accidental notes are preserved and [accidentaled notes ] and [non-accidentaled notes] are complementary, all notes have maintained their relative position after f0 shifted to n in step (3)
