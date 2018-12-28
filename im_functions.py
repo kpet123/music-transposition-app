@@ -5,42 +5,57 @@
 import numpy as np
 import itertools
 
+'''
+************** format_doc(arr) *************************
 
-#************** format_doc(arr) *************************
+converts numpy array of floats and zeros
+to 1s and 0s with 1s representing black
+'''
 
-#converts numpy array of floats and zeros
-# to 1s and 0s with 1s representing black
+
 def format_doc(arr):
 	max_val = np.amax(arr)
 	arr = arr/max_val #converts to ones and zeros
 	arr = arr.astype(bool) #converts to boolean
 	arr =(~arr).astype(int) #flip bits and cast to int
 	return arr
+'''
+********************* runs_of_ones(boolArr) **********************
 
-#********************* runs_of_ones(boolArr) **********************
+-returns list, each element is length of a run in bitArr
+-bitArr is  1D array/list of 1s and 0s
+-adapted from : https://stackoverflow.com/questions/1066758/find-length-of-sequences-of-identical-values-in-a-numpy-array-run-length-encodi
 
-#returns list, each element is length of a run in bitArr
-#bitArr is  1D array/list of 1s and 0s
-#adapted from : https://stackoverflow.com/questions/1066758/find-length-of-sequences-of-identical-values-in-a-numpy-array-run-length-encodi
-
+'''
 def runs_of_ones(bitArr):
 	run_list = []
 	for key, run_group  in itertools.groupby(bitArr):
 		if key: run_list.append(sum(run_group))  
 	return run_list
 			
+#more robust
+def find_runs(arr):
+	# make sure all runs of ones are well-bounded
+	bounded = numpy.hstack(([0], bits, [0]))
+	# get 1 at run starts and -1 at run ends
+	difs = numpy.diff(bounded)
+	run_starts, = numpy.where(difs > 0)
+	run_ends, = numpy.where(difs < 0)
+	runlengths =  run_ends - run_starts
+	return runlenths, run_starts
 
-#******** get_runs_histogram(arr, orientation_str, val_to_count) ********
+'''
+******** get_runs_histogram(arr, orientation_str, val_to_count) ********
 
-#generates histogram (list) of runs existing in document
-#position in list indicates length of run
-#value at position indicates number of occurences 
-#	arr = input document as numpy array
-#	orientation_str = "horizontal", "vertical"
-#	val_to_count = number (int/float) value of element making up run
-#		right now only works as 1 bc otherwise run_of_ones()
-#		 will crash, work on fixing in future 
-#	
+-generates histogram (list) of runs existing in document
+-position in list indicates length of run
+-value at position indicates number of occurences 
+	arr = input document as numpy array
+	orientation_str = "horizontal", "vertical"
+	val_to_count = number (int/float) value of element making up run
+'''
+
+
 def get_most_freqent_run(arr, orientation_str, val_to_count=1):
 	
 	
@@ -53,13 +68,48 @@ def get_most_freqent_run(arr, orientation_str, val_to_count=1):
 			row = arr[rownum]
 			histogram = histogram + runs_of_ones(row)
 			rownum = rownum + 1
-			
+		return np.bincount(histogram)			
 		
 		
 	elif orientation_str == "vertical":
+		histogram = []
+		colnum = 0
+		while colnum < len(arr[1]):
+			col = arr[,:colnum]
+			histogram = histogram + runs_of_ones(col)
+			colnum = colnum +1
+		return np.bincount(histogram)
 	
 	else: 
-		#throw error
-		print( "orientation must be 'horizontal' or 'vertical'")
+		raise ValueError("orientation must be 'horizontal'\
+				 or 'vertical'")
 
+'''
+*********** isolate_run(arr, target_val, replace_val, orientation_str) ***
+
+replaces runs longer and shorter than target_val with replace_val
+'''	
+def isolate_run(arr, target_val, replace_val, orientation_str):
+	if orientation_str = "horizontal":
+		rownum = 0
+		while rownum < len(arr)
+			row = arr[rownum]
+			runlengths, runstarts = find_runs(arr)
+			#replace non_target rows with replace_val
+			i = 0
+			while i< len(runlengths):
+				if run != target_val:
+					#TODO: optimize replacement! lookup table?
+					j = runstarts[i]
+					while j<runlengths[i]+runestarts[i]:
+						arr[j] = replace_val
+						j = j+1
+					 
+				i = i+1	
+			rownum = rownum + 1
 	
+	elif orientation_str == "vertical":
+
+	else:
+		raise ValueError("orientation must be 'horizontal' \
+				or 'vertical")
