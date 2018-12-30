@@ -42,10 +42,6 @@ def find_runs(arr):
 	run_starts, = np.where(difs > 0)
 	run_ends, = np.where(difs < 0)
 	runlengths =  run_ends - run_starts
-	print("run lengths")
-	print(runlengths)
-	print("run starts")
-	print(run_starts)
 	return runlengths, run_starts
 
 '''
@@ -92,7 +88,7 @@ def get_run_histogram(arr, orientation_str, val_to_count=1):
 
 replaces runs longer and shorter than target_val with replace_val
 '''	
-def isolate_run(arr, target_val, replace_val, orientation_str):
+def isolate_run(arr, target_val, replace_val, orientation_str, thresh=0):
 	if orientation_str == "horizontal":
 		rownum = 0
 		while rownum < len(arr):
@@ -102,7 +98,7 @@ def isolate_run(arr, target_val, replace_val, orientation_str):
 			i = 0
 			while i< len(runlengths):
 				print(runlengths[i])
-				if runlengths[i] != target_val:
+				if not(target_val - thresh <= runlengths[i] <=  target_val + thresh):
 					#TODO: optimize replacement! lookup table?
 					j = runstarts[i]
 					while j<runlengths[i]+runstarts[i]:
@@ -121,11 +117,9 @@ def isolate_run(arr, target_val, replace_val, orientation_str):
 			#replace non_target rows with replace_val
 			i = 0
 			while i< len(runlengths):
-				if runlengths[i] != target_val:
+				if not(target_val - thresh <= runlengths[i] <=  target_val + thresh):
 					#TODO: optimize replacement! lookup table?
 					j = runstarts[i]
-					print("run starts at", runstarts[i])
-					print("run ends at", runlengths[i]+runstarts[i])
 					while j<runlengths[i]+runstarts[i]:
 						arr[j][colnum] = replace_val
 						j = j+1
