@@ -36,13 +36,17 @@ def runs_of_ones(bitArr):
 #more robust
 def find_runs(arr):
 	# make sure all runs of ones are well-bounded
-	bounded = numpy.hstack(([0], bits, [0]))
+	bounded = np.hstack(([0], arr, [0]))
 	# get 1 at run starts and -1 at run ends
-	difs = numpy.diff(bounded)
-	run_starts, = numpy.where(difs > 0)
-	run_ends, = numpy.where(difs < 0)
+	difs = np.diff(bounded)
+	run_starts, = np.where(difs > 0)
+	run_ends, = np.where(difs < 0)
 	runlengths =  run_ends - run_starts
-	return runlenths, run_starts
+	print("run lengths")
+	print(runlengths)
+	print("run starts")
+	print(run_starts)
+	return runlengths, run_starts
 
 '''
 ******** get_runs_histogram(arr, orientation_str, val_to_count) ********
@@ -56,7 +60,7 @@ def find_runs(arr):
 '''
 
 
-def get_most_freqent_run(arr, orientation_str, val_to_count=1):
+def get_run_histogram(arr, orientation_str, val_to_count=1):
 	
 	
 	arr = arr.astype(int)
@@ -64,7 +68,7 @@ def get_most_freqent_run(arr, orientation_str, val_to_count=1):
 	if orientation_str == "horizontal":
 		histogram = []
 		rownum = 0
-		while rownum < len(arr)
+		while rownum < len(arr):
 			row = arr[rownum]
 			histogram = histogram + runs_of_ones(row)
 			rownum = rownum + 1
@@ -75,14 +79,13 @@ def get_most_freqent_run(arr, orientation_str, val_to_count=1):
 		histogram = []
 		colnum = 0
 		while colnum < len(arr[1]):
-			col = arr[,:colnum]
+			col = arr[:,colnum]
 			histogram = histogram + runs_of_ones(col)
 			colnum = colnum +1
 		return np.bincount(histogram)
 	
 	else: 
-		raise ValueError("orientation must be 'horizontal'\
-				 or 'vertical'")
+		raise ValueError("orientation must be 'horizontal or 'vertical'")
 
 '''
 *********** isolate_run(arr, target_val, replace_val, orientation_str) ***
@@ -90,26 +93,45 @@ def get_most_freqent_run(arr, orientation_str, val_to_count=1):
 replaces runs longer and shorter than target_val with replace_val
 '''	
 def isolate_run(arr, target_val, replace_val, orientation_str):
-	if orientation_str = "horizontal":
+	if orientation_str == "horizontal":
 		rownum = 0
-		while rownum < len(arr)
+		while rownum < len(arr):
 			row = arr[rownum]
-			runlengths, runstarts = find_runs(arr)
+			runlengths, runstarts = find_runs(row)
 			#replace non_target rows with replace_val
 			i = 0
 			while i< len(runlengths):
-				if run != target_val:
+				print(runlengths[i])
+				if runlengths[i] != target_val:
 					#TODO: optimize replacement! lookup table?
 					j = runstarts[i]
-					while j<runlengths[i]+runestarts[i]:
-						arr[j] = replace_val
+					while j<runlengths[i]+runstarts[i]:
+						arr[rownum][j] = replace_val
 						j = j+1
 					 
 				i = i+1	
 			rownum = rownum + 1
+		return arr
 	
 	elif orientation_str == "vertical":
-
+		colnum = 0
+		while colnum < len(arr[0]):
+			col = arr[:, colnum]
+			runlengths, runstarts = find_runs(col)
+			#replace non_target rows with replace_val
+			i = 0
+			while i< len(runlengths):
+				if runlengths[i] != target_val:
+					#TODO: optimize replacement! lookup table?
+					j = runstarts[i]
+					print("run starts at", runstarts[i])
+					print("run ends at", runlengths[i]+runstarts[i])
+					while j<runlengths[i]+runstarts[i]:
+						arr[j][colnum] = replace_val
+						j = j+1
+					 
+				i = i+1	
+			colnum = colnum + 1
+		return arr	
 	else:
-		raise ValueError("orientation must be 'horizontal' \
-				or 'vertical")
+		raise ValueError("orientation must be 'horizontal' or 'vertical")

@@ -219,4 +219,8 @@ print_result("im7", im7, integral7, h.quarters, 1)
 
 
 
+#### Testing im_functions
 
+import im_functions
+
+##Testing format_doc
