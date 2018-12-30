@@ -4,6 +4,9 @@
 
 import numpy as np
 import itertools
+import sys
+import matplotlib.image as mpimg
+import matplotlib.pyplot as plt 
 
 '''
 ************** format_doc(arr) *************************
@@ -129,3 +132,34 @@ def isolate_run(arr, target_val, replace_val, orientation_str, thresh=0):
 		return arr	
 	else:
 		raise ValueError("orientation must be 'horizontal' or 'vertical")
+
+
+
+'''
+version of gameraStaffRemoval.py without gamera functions. 
+input - png file of sheet music (sys.argv[0])
+output - file with just staffs and file with music-staffs (filenames 
+	     specified as sys.argv[1] and sys.argv[2], respectively
+
+TODO: make it safe
+
+'''
+
+def staff_separation(img):
+
+		proj_arr = get_run_histogram(img, "vertical")
+		most_frequent_occurences = max(proj_arr) # number of occurences
+
+		#value corresponds to height of staff line, may also remove parts of slurs
+		value = np.where(proj_arr == most_frequent_occurences)[0]
+
+		img2 = np.copy(img) #isolate_run mutates original
+		verticalStaffs = isolate_run(img2, value, 0, "vertical", thresh=1)
+
+		no_staff_raw = img - verticalStaffs
+
+		return verticalStaffs, no_staff_raw
+
+
+
+

@@ -12,11 +12,12 @@ Program Running Order:
     b. unrotate_music.py  ###
     c. scale_image.py ###  scales image to allow reasonable processing speed
 2. Clean Image
-    a. convert.py
+    a. convert.py (legacy, not used)
     b. clean_image.sh (faster) ### uses imagemajik to clean image
     C. full_clean_image.sh ### composite that includes scaling, cleaning, and staff removal
 3a. Remove staff lines
-    a. gameraStaffRemoval.py ### removes staff lines from image
+    a. staffRemoval.py       ###does not use gamera
+	b. gameraStaffRemoval.py ### removes staff lines from image
 
 3b. Identify staff line location
     a. gameraStaffLocator.py (ongoing, need normalized image or dilation)
