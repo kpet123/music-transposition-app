@@ -8,21 +8,17 @@ import im_functions
 import pickle
 import numpy as np
 import matplotlib.pyplot as plt
-with open("repaired_image.pkl", "rb") as f:
-    repaired_image = pickle.load(f)
 
 with open("systems.pkl", "rb") as f:
-    system_list = pickle.load(f)
-
-
-
-system = system_list[0]
-
-#get images
+    systems = pickle.load(f)
+#extract from pickle
+system = systems[0]
 no_staff = system['no_staff_img']
-
 just_staff = system['just_staff_img']
 
+#test fill_gaps()
+
+no_staff, just_staff = im_functions.fill_gaps(just_staff, no_staff, 1)
 
 #copy from here
 
@@ -47,9 +43,6 @@ if DIRECTION == 'up':
 	no_staff_block = np.concatenate((block, no_staff))
 	#add so staff is shifted up relative to music
 	shifted_system = staff_block + no_staff_block
-	#extract section of original size
-	shifted_system = shifted_system[len(block): len(shifted_system) , \
-								   0: len(shifted_system[0])]
 
 elif DIRECTION == 'down':
 	staff_block = np.concatenate((block, just_staff))
@@ -57,11 +50,9 @@ elif DIRECTION == 'down':
 	shifted_system = staff_block + no_staff_block
 	#add so staff is shifted up relative to music
 	shifted_system = staff_block + no_staff_block
-	#extract section of original size
-	shifted_system = shifted_system[0: len(shifted_system)-len(block), \
-								   0: len(shifted_system[0])]
 
 else:
 	raise ValueError("Direction must be up or down")
+
 
 plt.imsave("shifted_system.png", shifted_system)

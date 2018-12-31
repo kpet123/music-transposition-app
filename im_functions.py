@@ -7,6 +7,8 @@ import itertools
 import sys
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt 
+import scipy.ndimage as ndimage
+import pickle 
 
 '''TESTED
 ************** format_doc(arr) *************************
@@ -139,6 +141,21 @@ def isolate_run(arr, target_val, replace_val, orientation_str, thresh=0):
 		raise ValueError("orientation must be 'horizontal' or 'vertical")
 
 
+'''
+finds most frequent element in histogram
+
+Input: 1D histogram array with value as index and frequency of value as value associated with index
+
+Output: (int) most frequent element (index)
+'''
+def find_histogram_max(proj_arr):
+		most_frequent_occurences = max(proj_arr) # number of occurences
+
+		#value corresponds to height of staff line, may also remove parts of slurs
+		value = np.where(proj_arr == most_frequent_occurences)[0]
+		return value
+
+
 
 '''TESTED
 version of gameraStaffRemoval.py without gamera functions. 
@@ -152,7 +169,7 @@ TODO: make it safe
 
 def staff_separation(img):
 
-		proj_arr = get_run_histogram(img, "vertical")
+		proj_arr= get_run_histogram(img, "vertical")
 		most_frequent_occurences = max(proj_arr) # number of occurences
 
 		#value corresponds to height of staff line, may also remove parts of slurs
@@ -200,7 +217,7 @@ def get_staff_cc(formatted_img, pkl = "no", pkl_name = None):
 					pickle.dump(system_list, f, pickle.HIGHEST_PROTOCOL)
 
 
-'''
+'''TESTED
 Uses gradient shifts in horizontal staff projection to cacluate staff location
 Input: 1D numpy array of staff horizontal projection
 Output: sorted list of staff locations
@@ -208,13 +225,16 @@ Output: sorted list of staff locations
 
 def gradientloc(staffs1D):
     #enumerate staffs1D and delete areas where there is no data 
-    staff_gradient=np.diff(staffs1D)
+    bounded = np.hstack(([0], staffs1D, [0]))
+    staff_gradient=np.diff(bounded)
     staff_gradient=list(staff_gradient)
     staff_features = []
     i=0
     while i< len(staff_gradient):
         staff_features.append([i, staff_gradient[i]])
         i+=1
+
+  
     #sort by gradient value
     sort_gradient = sorted(staff_features, key=lambda tup: tup[1])
     #highest gradients should correspond to biggest jumps; i.e. beginning of line
@@ -224,8 +244,8 @@ def gradientloc(staffs1D):
     #sort 
     return sorted(linelocs)
 
-'''
-Gives coordinates of degraded horizontal lines  within an image
+'''TESTED
+Gives coordinates of degraded horizontal lines  within an image and distances between them
 
 Input:
 	staff_arr: array with only staff lines (1 system)
@@ -241,6 +261,95 @@ def get_system_staff_location(staff_arr):
 	staffs1D = np.sum(staff_arr, axis=1)
 
 	#pick method
-	return gradientloc(staffs1D)        
+	staff_locations = np.asarray(gradientloc(staffs1D)) 
+    
+    #calculate size of gaps
+	gapsize = np.average(np.diff(staff_locations))
+
+	return staff_locations, gapsize
 
 
+
+'''TESTED
+# replaces areas deleted in staff removal
+Input:
+    raw_staffs: formatted array of just staffs
+    no_staff: formatted array of music with staffs removed
+    thickness: thickness of staff line
+    pkl: if pickled result of output wanted, 'yes' or 'no'
+    pkl_name: name of pickle file with .pkl extension
+Output:
+    repaired system without stafflines
+	cleaned+dilated
+'''
+def fill_gaps(raw_staffs, no_staff, thickness, pkl='no', pkl_name=None):
+
+		#variables needed
+		raw_staff_copy = np.copy(raw_staffs)
+		spots_to_repair = raw_staffs
+		staff_width = len(raw_staffs[0])
+		thickness = int(thickness)
+
+		#caculate staff locations 
+		staff_locations, d = get_system_staff_location(raw_staffs)
+
+		#array of zeros for blanking out staff lines
+		blockspace = np.zeros((thickness, staff_width))
+		#blank every staff line
+		for location in staff_locations:
+			spots_to_repair[location:location+thickness, 0:staff_width] = \
+																blockspace
+		#add 
+		repaired_image = no_staff + spots_to_repair
+
+
+		#generate clean staff image
+		clean_staff = raw_staff_copy - spots_to_repair
+		structure = np.ones((thickness, int(staff_width/20)), dtype = bool)
+		clean_and_dilated = ndimage.morphology.binary_dilation(clean_staff, \
+															   structure,   \
+															   iterations=50)
+		if pkl == 'yes':
+				with open(pkl_name, "wb") as f :
+					pickle.dump({'repaired image':repaired_image, 'clean staff': clean_and_dilated}, f, pickle.HIGHEST_PROTOCOL)
+
+
+		return repaired_image, clean_and_dilated
+
+
+
+'''
+#moves lines to specified position
+'''
+
+
+
+def movelines(no_staff, just_staff, displacement, direction, plk='no', pklname='None'):
+
+		#find distance corresponding to shifting 1 note
+		staff_locations, gapsize = im_functions.get_system_staff_location(just_staff)
+		note_dist = gapsize/2
+
+
+		#block to add:
+		block = np.zeros((int(note_dist*displacement), len(no_staff[0])))
+
+		if direction == 'up':
+			#shift staff up
+			staff_block = np.concatenate((just_staff, block))
+			#shift music down
+			no_staff_block = np.concatenate((block, no_staff))
+			#add so staff is shifted up relative to music
+			shifted_system = staff_block + no_staff_block
+
+		elif direction == 'down':
+			staff_block = np.concatenate((block, just_staff))
+			no_staff_block = np.concatenate((no_staff, block))
+			shifted_system = staff_block + no_staff_block
+			#add so staff is shifted up relative to music
+			shifted_system = staff_block + no_staff_block
+
+		else:
+			raise ValueError("'direction' must be 'up' or 'down'")
+
+		return shifted_system
