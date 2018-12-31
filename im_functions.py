@@ -8,7 +8,7 @@ import sys
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt 
 
-'''
+'''TESTED
 ************** format_doc(arr) *************************
 
 converts numpy array of floats and zeros
@@ -22,7 +22,10 @@ def format_doc(arr):
 	arr = arr.astype(bool) #converts to boolean
 	arr =(~arr).astype(int) #flip bits and cast to int
 	return arr
-'''
+
+
+
+'''TESTED
 ********************* runs_of_ones(boolArr) **********************
 
 -returns list, each element is length of a run in bitArr
@@ -47,7 +50,7 @@ def find_runs(arr):
 	runlengths =  run_ends - run_starts
 	return runlengths, run_starts
 
-'''
+'''TESTED
 ******** get_runs_histogram(arr, orientation_str, val_to_count) ********
 
 -generates histogram (list) of runs existing in document
@@ -86,7 +89,9 @@ def get_run_histogram(arr, orientation_str, val_to_count=1):
 	else: 
 		raise ValueError("orientation must be 'horizontal or 'vertical'")
 
-'''
+
+
+'''TESTED
 *********** isolate_run(arr, target_val, replace_val, orientation_str) ***
 
 replaces runs longer and shorter than target_val with replace_val
@@ -135,7 +140,7 @@ def isolate_run(arr, target_val, replace_val, orientation_str, thresh=0):
 
 
 
-'''
+'''TESTED
 version of gameraStaffRemoval.py without gamera functions. 
 input - png file of sheet music (sys.argv[0])
 output - file with just staffs and file with music-staffs (filenames 
@@ -161,5 +166,81 @@ def staff_separation(img):
 		return verticalStaffs, no_staff_raw
 
 
+'''
+
+Adapted from gamera_getCC.py
+Gets connected compnents from sheet music file then pickles
+Input: 
+	formatted_img: array formatted with format_doc
+	pkl: str of whether or not to pickle return, "yes" or "no"
+'''
+def get_staff_cc(formatted_img, pkl = "no", pkl_name = None):
+
+		blob_img = measure.label(img) #arr with different values labeling each cc
+		component_list = measure.regionprops(blob_img) #list of ccs and their attributes
+		system_list = [] #list with all system info
+
+		#generate system_list
+		for c in component_list:
+		   
+			#find systems, rule out by size
+			if c['bbox_area'] > len(img[0])* len(img)/100:
+				bbox=c['bbox']
+				#remove staff in system
+				c_staff, c_nostaff = im_functions.staff_separation(img[bbox[0]:bbox[2],\
+									  bbox[1]:bbox[3]])
+				system_list.append({"no_staff_img" : c_nostaff,\
+									"just_staff_img" : c_staff,\
+									"offset_x" : bbox[1], \
+									"offset_y" : bbox[0],\
+									"all_features" : c})
+		 
+		if pkl == "yes":
+				with open(pkl_name, "wb") as f : 
+					pickle.dump(system_list, f, pickle.HIGHEST_PROTOCOL)
+
+
+'''
+Uses gradient shifts in horizontal staff projection to cacluate staff location
+Input: 1D numpy array of staff horizontal projection
+Output: sorted list of staff locations
+'''
+
+def gradientloc(staffs1D):
+    #enumerate staffs1D and delete areas where there is no data 
+    staff_gradient=np.diff(staffs1D)
+    staff_gradient=list(staff_gradient)
+    staff_features = []
+    i=0
+    while i< len(staff_gradient):
+        staff_features.append([i, staff_gradient[i]])
+        i+=1
+    #sort by gradient value
+    sort_gradient = sorted(staff_features, key=lambda tup: tup[1])
+    #highest gradients should correspond to biggest jumps; i.e. beginning of line
+    lines = sort_gradient[len(sort_gradient)-5 :len(sort_gradient)]
+    #convert to array to slice x values
+    linelocs= np.array(lines)[:,0]
+    #sort 
+    return sorted(linelocs)
+
+'''
+Gives coordinates of degraded horizontal lines  within an image
+
+Input:
+	staff_arr: array with only staff lines (1 system)
+Output: 
+	locations of staff lines (numpy array)
+'''
+
+
+
+def get_system_staff_location(staff_arr):
+
+	#get 1D projection
+	staffs1D = np.sum(staff_arr, axis=1)
+
+	#pick method
+	return gradientloc(staffs1D)        
 
 
