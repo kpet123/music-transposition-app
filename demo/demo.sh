@@ -29,7 +29,7 @@ python ../src/generate_transposed_score.py output1.png  $displacement $direction
 
 #clean directory
 
-#rm output1.png
+rm output1.png
 
 echo -n "Staff shifting complete. Look for generated file in demo directory"
 
