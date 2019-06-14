@@ -3,17 +3,40 @@
 FROM ubuntu
 
 RUN apt-get upgrade && \
-apt-get update && \
-apt-get install -y \
+apt-get update
+
+RUN apt-get install -y \
 python3-pip \
 python-pip \
-gcc \
-libtiff5 \
-libpng12-0 \
-  && \
-  -v /tmp/.X11-unix:/tmp/.X11-unix:ro && \ 
-  -e DISPLAY=$DISPLAY 
+git \
+wget \
+cmake \
+ninja-build \
+libpng-dev 
+#python-wxgtk3.0
 
+#install libtiff
+RUN wget http://download.osgeo.org/libtiff/tiff-4.0.10.tar.gz && \
+tar -xzf tiff-4.0.10.tar.gz && \
+cd tiff-4.0.10 && \
+mkdir libtiff-build && \
+cd libtiff-build && \
+cmake -DCMAKE_INSTALL_DOCDIR=/usr/share/doc/libtiff-4.0.10 \
+      -DCMAKE_INSTALL_PREFIX=/usr -G Ninja .. && \
+ninja && \
+ninja install && \
+rm ../../tiff-4.0.10.tar.gz
+
+
+#install gamera
+
+RUN git clone https://github.com/hsnr-gamera/gamera.git gamera-src && \
+cd gamera-src && \
+python setup.py build && \
+sudo python setup.py install
+
+#RUN apt-get install -y python3-matplotlib
+#RUN apt-get install libtiff5 
 
 
 # indented lines from https://groups.google.com/forum/#!topic/etetoolkit/4SrZk5fRtCM
