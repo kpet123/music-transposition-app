@@ -2,36 +2,24 @@
 # for gamera framework 
 FROM ubuntu
 
+#FROM crux/gtk
+
 RUN apt-get upgrade && \
 apt-get update
 
 RUN apt-get install -y \
 python3-pip \
-python-pip 
+python-pip  
 
 RUN apt-get install -y git \
 wget \
 cmake \
 ninja-build \
 pkg-config \
-libgtk-3-dev
+libpng-dev
 
-RUN apt-get install -y libpng-dev  
-
-#install gkt+ [wget dependency]
-
-
-
-#install wget [gamera GUI dependency]
-RUN wget -O \
-wxPython-src-3.0.1.1.tar.bz2 \
-https://sourceforge.net/projects/wxpython/files/wxPython/3.0.1.1/wxPython-src-3.0.1.1.tar.bz2/download \ &&
-
-tar -xjf wxPython-src-3.0.1.1.tar.bz2 \ &&
-
-cd wxPython-src-3.0.1.1 \ &&
-
-python build-wxpython.py --build_dir=../bld
+#RUN apt-get install -y pkg-config 
+#RUN apt-get install -y libpng-dev
 
 
 #install libtiff
@@ -50,14 +38,11 @@ rm ../../tiff-4.0.10.tar.gz
 #install gamera
 
 RUN git clone https://github.com/hsnr-gamera/gamera.git gamera-src && \
-cd gamera-src 
-# && \
-#python setup.py build && \
-#sudo python setup.py install
+cd gamera-src && \
+python setup.py --nowx build && \
+python setup.py --nowx install
 
 #RUN apt-get install -y python3-matplotlib
-#RUN apt-get install libtiff5 
-
 
 # indented lines from https://groups.google.com/forum/#!topic/etetoolkit/4SrZk5fRtCM
 #WORKDIR /root

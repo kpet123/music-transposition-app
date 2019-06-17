@@ -5,7 +5,7 @@
 #When running for first time or if changes are made to Dockerfile,
 #uncomment the following code
 #
-docker build -t gamera-image .
+#docker build -t gamera-image .
 #
 
 
