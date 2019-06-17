@@ -7,13 +7,32 @@ apt-get update
 
 RUN apt-get install -y \
 python3-pip \
-python-pip \
-git \
+python-pip 
+
+RUN apt-get install -y git \
 wget \
 cmake \
 ninja-build \
-libpng-dev 
-#python-wxgtk3.0
+pkg-config \
+libgtk-3-dev
+
+RUN apt-get install -y libpng-dev  
+
+#install gkt+ [wget dependency]
+
+
+
+#install wget [gamera GUI dependency]
+RUN wget -O \
+wxPython-src-3.0.1.1.tar.bz2 \
+https://sourceforge.net/projects/wxpython/files/wxPython/3.0.1.1/wxPython-src-3.0.1.1.tar.bz2/download \ &&
+
+tar -xjf wxPython-src-3.0.1.1.tar.bz2 \ &&
+
+cd wxPython-src-3.0.1.1 \ &&
+
+python build-wxpython.py --build_dir=../bld
+
 
 #install libtiff
 RUN wget http://download.osgeo.org/libtiff/tiff-4.0.10.tar.gz && \
@@ -31,9 +50,10 @@ rm ../../tiff-4.0.10.tar.gz
 #install gamera
 
 RUN git clone https://github.com/hsnr-gamera/gamera.git gamera-src && \
-cd gamera-src && \
-python setup.py build && \
-sudo python setup.py install
+cd gamera-src 
+# && \
+#python setup.py build && \
+#sudo python setup.py install
 
 #RUN apt-get install -y python3-matplotlib
 #RUN apt-get install libtiff5 
